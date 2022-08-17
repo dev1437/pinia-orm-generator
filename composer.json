@@ -1,0 +1,21 @@
+{
+    "name": "dev1437/pinia-model-generator",
+    "autoload": {
+        "psr-4": {
+            "Dev1437\\PiniaModelGenerator\\": "src/"
+        }
+    },
+    "require": {
+        "dev1437/model-parser": "^1.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^7.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Dev1437\\PiniaModelGenerator\\PiniaModelGeneratorServiceProvider"
+            ]
+        }
+    }
+}
