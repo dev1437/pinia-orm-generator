@@ -5,7 +5,6 @@ namespace Dev1437\PiniaModelGenerator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use PiniaCodeGenerator;
 use ReflectionClass;
 
 class PiniaModelsBuilder
