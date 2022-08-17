@@ -9,39 +9,37 @@ use ReflectionClass;
 
 class PiniaModelsBuilder
 {
-    public $piniaImports = [];
-    public $modelImports = [];
-    public $morphRelationships = [];
-    public $enumCode = '';
-
-    public $pivotRelations = [];
+    public function __construct(private $path = null, private $modelParams = [], private $models = null)
+    {
+        if (!$this->path) {
+            $this->path = resource_path('js/models');
+        }
+    }
 
     public function buildModels()
     {
-        if (!File::isDirectory(resource_path('js/models'))) {
-            File::makeDirectory(resource_path('js/models'));
+
+        if (!File::isDirectory($this->path)) {
+            File::makeDirectory($this->path, recursive: true);
         }
 
         $pivotRelations = [];
         $morphRelationships = [];
 
-        $models = $this->getModels();
+        if (!$this->models) {
+            $this->models = $this->getModels();
+        }
 
-        $modelParams = [
-            User::class => [
-                'filters' => [
-                    'email_verified_at',
-                ],
-            ],
-        ];
-
-        foreach ($models as $model) {
+        foreach ($this->models as $model) {
             $modelName = explode('\\', $model);
             $modelName = $modelName[array_key_last($modelName)];
 
-            $pcg = new PiniaCodeGenerator($model, true, array_key_exists($model, $modelParams) ? $modelParams[$model]['filters'] : []);
+            $ignoreHidden = array_key_exists($model, $this->modelParams) ? $this->modelParams[$model]['ignoreHidden'] : true;
+            $filters = array_key_exists($model, $this->modelParams) ? $this->modelParams[$model]['filters'] : [];
 
-            $file = resource_path("js/models/$modelName.ts");
+            $pcg = new PiniaCodeGenerator($model, $ignoreHidden, $filters);
+
+            $file = "$this->path/$modelName.ts";
 
             $oldContents = '';
 
@@ -50,7 +48,7 @@ class PiniaModelsBuilder
             }
 
             File::put(
-                resource_path("js/models/$modelName.ts"),
+                $file,
                 $pcg->generateCodeForModel($oldContents)
             );
 
@@ -71,8 +69,6 @@ class PiniaModelsBuilder
     }
 
     /**
-     * Get a list of all models.
-     *
      * @return Collection
      */
     private function getModels()
@@ -97,7 +93,7 @@ class PiniaModelsBuilder
 
     public function replaceMorphTypes($morphRelationships)
     {
-        collect(File::allFiles(resource_path('js/models')))->filter(function ($item) use ($morphRelationships) {
+        collect(File::allFiles($this->path))->filter(function ($item) use ($morphRelationships) {
             $model = substr($item->getFilename(), 0, -3);
 
             return array_key_exists($model, $morphRelationships);
@@ -223,36 +219,7 @@ class PiniaModelsBuilder
 
             $code .= '}';
 
-            File::put(resource_path("js/models/$camelCaseRelation.ts"), $piniaHeader.$code);
+            File::put("$this->path/$camelCaseRelation.ts", $piniaHeader.$code);
         }
-    }
-
-    public function createPiniaAttribute($attribute, $value)
-    {
-        $mappedType = array_key_exists($value['type'], $this->mappings) ? $this->mappings[$value['type']] : 'string';
-
-        $piniaAttribute = 'Attr';
-        $piniaDefault = '(null)';
-        if (array_key_exists('enum', $value)) {
-            preg_match('/.*\\\\(.*)/', $value['type'], $matches);
-
-            $this->enumCode .= "export enum {$matches[1]} {\n";
-            foreach ($value['enum'] as $enumKey => $enumValue) {
-                $this->enumCode .= "  $enumKey = $enumValue,\n";
-            }
-            $this->enumCode .= "};\n\n";
-            $mappedType = $matches[1];
-        } elseif (array_key_exists($mappedType, $this->piniaMappings)) {
-            $piniaAttribute = $this->piniaMappings[$mappedType];
-            $piniaDefault = $this->piniaDefaults[$mappedType];
-            if ($value['nullable']) {
-                $piniaDefault = $this->piniaNullableDefaults[$mappedType];
-            }
-        }
-
-        $this->piniaImports[] = $piniaAttribute;
-        $nullable = $value['nullable'] ? ' | null' : '';
-
-        return "  @$piniaAttribute$piniaDefault $attribute!: $mappedType$nullable\n";
     }
 }
