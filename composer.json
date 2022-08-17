@@ -1,5 +1,6 @@
 {
     "name": "dev1437/pinia-model-generator",
+    "description": "Generate Pinia ORM models based on your Laravel models",
     "autoload": {
         "psr-4": {
             "Dev1437\\PiniaModelGenerator\\": "src/"
