@@ -1,11 +1,11 @@
-#This work is based on https://github.com/fumeapp/modeltyper, credit to them.
+# This work is based on https://github.com/fumeapp/modeltyper, credit to them.
 
-###To use
+### To use
 * Install pinia-orm if you haven't already `npm i pinia-orm`
 * Run `artisan piniamodels:generate`
 * Code will be generated into `resources/js/models` by default
 
-###Modifying
+### Modifying
 
 By default, hidden fields are excluded and all other fields, mutators and relationships are included
 
@@ -41,7 +41,7 @@ $pmb = new PiniaModelsBuilder(null, [
 $pmb->buildModels();
 ```
 
-### User Defined code
+### Custom code in generated models
 Each model contains two blocks 
 ```
 ...
