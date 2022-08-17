@@ -6,7 +6,8 @@
         }
     },
     "require": {
-        "dev1437/model-parser": "^1.0"
+        "dev1437/model-parser": "^1.0",
+        "doctrine/dbal": "^3.4"
     },
     "require-dev": {
         "orchestra/testbench": "^7.0"
