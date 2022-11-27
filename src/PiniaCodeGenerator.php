@@ -79,7 +79,7 @@ class PiniaCodeGenerator
         $entityName = Str::lower($modelName).'s';
 
         $code = "export default class $modelName extends Model {\n";
-        $code .= "  static entity = '$entityName'\n";
+        $code .= "  static entity = 'orm/$entityName'\n";
         if (count($details['fields']) > 0) {
             $code .= "  // fields\n";
             foreach ($details['fields'] as $key => $value) {
@@ -138,11 +138,13 @@ class PiniaCodeGenerator
         $code .= '  /* --- end user code --- */'.PHP_EOL;
         $code .= "}\n";
 
-        $piniaHeader = 'import { Model';
+        $piniaHeader = "import { Model } from 'pinia-orm';\n";
+
+        $piniaHeader .= 'import { ';
         foreach (array_unique($this->piniaImports) as $import) {
             $piniaHeader .= ", $import";
         }
-        $piniaHeader .= " } from 'pinia-orm';\n";
+        $piniaHeader .= " } from 'pinia-orm/dist/decorators';\n";
 
         foreach ($this->modelImports as $model) {
             $piniaHeader .= "import $model from './$model';\n";

@@ -178,7 +178,7 @@ class PiniaModelsBuilder
 
             $code .= "export default class $camelCaseRelation extends Model {\n";
             $code .= "  static primaryKey = ['{$relation['keys']['pivot_foreign_key']}', '{$relation['keys']['pivot_related_key']}'];\n";
-            $code .= "  static entity = '$camelCaseRelation'\n";
+            $code .= "  static entity = 'orm/$camelCaseRelation'\n";
 
             $piniaImports = [];
             $enumCode = '';
@@ -211,11 +211,13 @@ class PiniaModelsBuilder
             }
 
             $piniaImports = array_unique($piniaImports);
-            $piniaHeader = 'import { Model';
-            foreach ($piniaImports as $import) {
+            $piniaHeader = "import { Model } from 'pinia-orm';\n";
+
+            $piniaHeader .= 'import { ';
+            foreach (array_unique($this->piniaImports) as $import) {
                 $piniaHeader .= ", $import";
             }
-            $piniaHeader .= " } from 'pinia-orm';\n\n";
+            $piniaHeader .= " } from 'pinia-orm/dist/decorators';\n";
 
             $code .= '}';
 
