@@ -160,15 +160,15 @@ class PiniaModelsBuilder
             'number' => '(0)',
             'string' => '(\'\')',
             'boolean' => '(false)',
-            'number?' => '(0, { nullable: true })',
-            'string?' => '(\'\', { nullable: true })',
-            'boolean?' => '(false, { nullable: true })',
+            'number?' => '(0, { notNullable: false })',
+            'string?' => '(\'\', { notNullable: false })',
+            'boolean?' => '(false, { notNullable: false })',
         ];
 
         $piniaNullableDefaults = [
-            'number' => '(0, { nullable: true })',
-            'string' => '(\'\', { nullable: true })',
-            'boolean' => '(false, { nullable: true })',
+            'number' => '(0, { notNullable: false })',
+            'string' => '(\'\', { notNullable: false })',
+            'boolean' => '(false, { notNullable: false })',
         ];
 
         foreach ($pivotRelations as $relation) {
@@ -207,7 +207,7 @@ class PiniaModelsBuilder
                 $piniaImports[] = $piniaAttribute;
                 $nullable = $value['nullable'] ? ' | null' : '';
 
-                $code .= "  @$piniaAttribute$piniaDefault $column!: $mappedType$nullable\n";
+                $code .= "  @$piniaAttribute$piniaDefault $column: $mappedType$nullable\n";
             }
 
             $piniaImports = array_unique($piniaImports);

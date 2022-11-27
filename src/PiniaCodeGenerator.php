@@ -40,15 +40,15 @@ class PiniaCodeGenerator
         'number' => '(0)',
         'string' => '(\'\')',
         'boolean' => '(false)',
-        'number?' => '(0, { nullable: true })',
-        'string?' => '(\'\', { nullable: true })',
-        'boolean?' => '(false, { nullable: true })',
+        'number?' => '(0, { notNullable: false })',
+        'string?' => '(\'\', { notNullable: false })',
+        'boolean?' => '(false, { notNullable: false })',
     ];
 
     private $piniaNullableDefaults = [
-        'number' => '(0, { nullable: true })',
-        'string' => '(\'\', { nullable: true })',
-        'boolean' => '(false, { nullable: true })',
+        'number' => '(0, { notNullable: false })',
+        'string' => '(\'\', { notNullable: false })',
+        'boolean' => '(false, { notNullable: false })',
     ];
 
     private $piniaRelations = [
@@ -220,7 +220,7 @@ class PiniaCodeGenerator
             $relationshipDefault = "(() => {$value['model']}, '{$value['keys']['foreign_key']}', '{$value['keys']['morph_type']}', '{$value['keys']['local_key']}')";
         }
 
-        return "  @$mappedRelation$relationshipDefault $relation!: $piniaType\n";
+        return "  @$mappedRelation$relationshipDefault $relation: $piniaType\n";
     }
 
     public function createPiniaAttribute($piniaAttribute, $attribute, $value, $mappedType)
@@ -237,7 +237,7 @@ class PiniaCodeGenerator
 
         $nullable = $value['nullable'] ? ' | null' : '';
 
-        return "  @$piniaAttribute$piniaDefault $attribute!: $mappedType$nullable\n";
+        return "  @$piniaAttribute$piniaDefault $attribute: $mappedType$nullable\n";
     }
 
     public function createPiniaEnumMutator($piniaAttribute, $attribute, $value, $mappedType)
@@ -255,7 +255,7 @@ class PiniaCodeGenerator
 
         $nullable = $value['nullable'] ? ' | null' : '';
 
-        return "  @$piniaAttribute$piniaDefault $attribute!: $mappedType$nullable\n";
+        return "  @$piniaAttribute$piniaDefault $attribute: $mappedType$nullable\n";
     }
 
     public function createPiniaEnumAttribute($piniaAttribute, $attribute, $castedField, $value, $mappedType)
@@ -273,6 +273,6 @@ class PiniaCodeGenerator
 
         $nullable = $value['nullable'] ? ' | null' : '';
 
-        return "  @$piniaAttribute$piniaDefault $attribute!: $mappedType$nullable\n";
+        return "  @$piniaAttribute$piniaDefault $attribute: $mappedType$nullable\n";
     }
 }
