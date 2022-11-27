@@ -215,7 +215,7 @@ class PiniaModelsBuilder
 
             $piniaHeader .= 'import { ';
             foreach (array_unique($this->piniaImports) as $import) {
-                $piniaHeader .= ", $import";
+                $piniaHeader .= "$import,";
             }
             $piniaHeader .= " } from 'pinia-orm/dist/decorators';\n";
 
