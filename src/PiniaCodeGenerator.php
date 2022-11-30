@@ -225,7 +225,7 @@ class PiniaCodeGenerator
 
     public function createPiniaAttribute($piniaAttribute, $attribute, $value, $mappedType)
     {
-        $piniaDefault = '(null)';
+        $piniaDefault = '(undefined)';
 
         $attributeHasPiniaType = array_key_exists($mappedType, $this->piniaMappings);
         if ($attributeHasPiniaType) {
@@ -235,14 +235,14 @@ class PiniaCodeGenerator
             }
         }
 
-        $nullable = $value['nullable'] ? ' | null' : '';
+        $nullable = $value['nullable'] ? ' | undefined' : '';
 
-        return "  @$piniaAttribute$piniaDefault $attribute: $mappedType$nullable\n";
+        return "  @$piniaAttribute$piniaDefault declare $attribute: $mappedType$nullable\n";
     }
 
     public function createPiniaEnumMutator($piniaAttribute, $attribute, $value, $mappedType)
     {
-        $piniaDefault = '(null)';
+        $piniaDefault = '(undefined)';
 
         $mappedType = explode('\\', $value['type']);
         $mappedType = $mappedType[array_key_last($mappedType)];
@@ -253,14 +253,14 @@ class PiniaCodeGenerator
         }
         $this->enumCode .= "};\n\n";
 
-        $nullable = $value['nullable'] ? ' | null' : '';
+        $nullable = $value['nullable'] ? ' | undefined' : '';
 
         return "  @$piniaAttribute$piniaDefault $attribute: $mappedType$nullable\n";
     }
 
     public function createPiniaEnumAttribute($piniaAttribute, $attribute, $castedField, $value, $mappedType)
     {
-        $piniaDefault = '(null)';
+        $piniaDefault = '(undefined)';
 
         $mappedType = explode('\\', $castedField['type']);
         $mappedType = $mappedType[array_key_last($mappedType)];
@@ -271,7 +271,7 @@ class PiniaCodeGenerator
         }
         $this->enumCode .= "};\n\n";
 
-        $nullable = $value['nullable'] ? ' | null' : '';
+        $nullable = $value['nullable'] ? ' | undefined' : '';
 
         return "  @$piniaAttribute$piniaDefault $attribute: $mappedType$nullable\n";
     }

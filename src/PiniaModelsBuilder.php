@@ -186,7 +186,7 @@ class PiniaModelsBuilder
                 $mappedType = array_key_exists($value['type'], $mappings) ? $mappings[$value['type']] : 'string';
 
                 $piniaAttribute = 'Attr';
-                $piniaDefault = '(null)';
+                $piniaDefault = '(undefined)';
                 if (array_key_exists('enum', $value)) {
                     preg_match('/.*\\\\(.*)/', $value['type'], $matches);
 
@@ -205,7 +205,7 @@ class PiniaModelsBuilder
                 }
 
                 $piniaImports[] = $piniaAttribute;
-                $nullable = $value['nullable'] ? ' | null' : '';
+                $nullable = $value['nullable'] ? ' | undefined' : '';
 
                 $code .= "  @$piniaAttribute$piniaDefault $column: $mappedType$nullable\n";
             }
@@ -214,7 +214,7 @@ class PiniaModelsBuilder
             $piniaHeader = "import { Model } from 'pinia-orm';\n";
 
             $piniaHeader .= 'import { ';
-            foreach (array_unique($this->piniaImports) as $import) {
+            foreach (array_unique($piniaImports) as $import) {
                 $piniaHeader .= "$import,";
             }
             $piniaHeader .= " } from 'pinia-orm/dist/decorators';\n";
