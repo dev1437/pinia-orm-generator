@@ -207,7 +207,7 @@ class PiniaModelsBuilder
                 $piniaImports[] = $piniaAttribute;
                 $nullable = $value['nullable'] ? ' | undefined' : '';
 
-                $code .= "  @$piniaAttribute$piniaDefault $column: $mappedType$nullable\n";
+                $code .= "  @$piniaAttribute$piniaDefault declare $column: $mappedType$nullable\n";
             }
 
             $piniaImports = array_unique($piniaImports);

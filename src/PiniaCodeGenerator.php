@@ -220,7 +220,7 @@ class PiniaCodeGenerator
             $relationshipDefault = "(() => {$value['model']}, '{$value['keys']['foreign_key']}', '{$value['keys']['morph_type']}', '{$value['keys']['local_key']}')";
         }
 
-        return "  @$mappedRelation$relationshipDefault $relation: $piniaType\n";
+        return "  @$mappedRelation$relationshipDefault declare $relation: $piniaType\n";
     }
 
     public function createPiniaAttribute($piniaAttribute, $attribute, $value, $mappedType)
@@ -255,7 +255,7 @@ class PiniaCodeGenerator
 
         $nullable = $value['nullable'] ? ' | undefined' : '';
 
-        return "  @$piniaAttribute$piniaDefault $attribute: $mappedType$nullable\n";
+        return "  @$piniaAttribute$piniaDefault declare $attribute: $mappedType$nullable\n";
     }
 
     public function createPiniaEnumAttribute($piniaAttribute, $attribute, $castedField, $value, $mappedType)
@@ -273,6 +273,6 @@ class PiniaCodeGenerator
 
         $nullable = $value['nullable'] ? ' | undefined' : '';
 
-        return "  @$piniaAttribute$piniaDefault $attribute: $mappedType$nullable\n";
+        return "  @$piniaAttribute$piniaDefault declare $attribute: $mappedType$nullable\n";
     }
 }
